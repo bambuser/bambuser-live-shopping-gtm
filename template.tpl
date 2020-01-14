@@ -14,7 +14,7 @@ ___INFO___
   "version": 1,
   "securityGroups": [],
   "displayName": "Bambuser Live Shopping",
-  "categories": ["MARKETING", "ANALYTICS"],
+  "categories": ["ANALYTICS", "MARKETING"],
   "brand": {
     "id": "brand_dummy",
     "displayName": "",
@@ -100,11 +100,11 @@ const log = require('logToConsole');
 var bbu = copyFromWindow('_bambuser');
 if (bbu != null && typeof(bbu) != 'undefined') {
   var eventData = {};
-  eventData.event = 'purchase';
-  eventData.orderId = data.orderId;
-  eventData.orderValue = data.orderValue;
-  eventData.currency = data.currency;
-  eventData.orderProductIds = data.productIds;
+  eventData[bbu.params.EVENT.dataSelector] = 'purchase';
+  eventData[bbu.params.ORDER_ID.dataSelector] = data.orderId;
+  eventData[bbu.params.ORDER_VALUE.dataSelector] = data.orderValue;
+  eventData[bbu.params.CURRENCY.dataSelector] = data.currency;
+  eventData[bbu.params.ORDER_PRODUCTIDS.dataSelector] = data.productIds;
   
   bbu.collect(eventData);
 }
@@ -245,6 +245,6 @@ scenarios: []
 
 ___NOTES___
 
-Created on 1/14/2020, 10:43:57 AM
+Created on 1/14/2020, 4:42:38 PM
 
 
