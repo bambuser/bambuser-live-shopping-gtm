@@ -15,5 +15,5 @@
 homepage: "https://bambuser.com"
 documentation: "https://bambuser.com"
 versions:
-  - sha: 687f88aca874f353bfde13367f2b0c2562db3087
+  - sha: 2ec11d02305d9a1bd45699436d38336d9e5722bf
     changeNotes: Initial Version
