@@ -224,6 +224,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "_bamls_seid"
+              },
+              {
+                "type": 1,
+                "string": "_bamls_caid"
               }
             ]
           }
