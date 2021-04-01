@@ -15,6 +15,8 @@
 homepage: "https://bambuser.com"
 documentation: "https://bambuser.com"
 versions:
+  - sha: a3abd6d251a3baf1bc0df0595a80f03303f0672e
+    changeNotes: Update to latest logo
   - sha: aae2939c730f063d45503b5eff83c91218e5215b
     changeNotes: Update access to cookies
   - sha: 2ec11d02305d9a1bd45699436d38336d9e5722bf
