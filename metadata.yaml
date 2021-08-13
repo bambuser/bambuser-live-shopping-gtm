@@ -1,4 +1,4 @@
-# Copyright 2019 Bambuser
+# Copyright 2021 Bambuser
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +13,10 @@
 # limitations under the License.
 
 homepage: "https://bambuser.com"
-documentation: "https://bambuser.com"
+documentation: "https://bambuser.com/docs"
 versions:
+  - sha: 878aab17d03189702dab47fe2a8d023d10b24a94
+    changeNote: Improve the tag, include tracking library, add debugging mode
   - sha: a3abd6d251a3baf1bc0df0595a80f03303f0672e
     changeNotes: Update to latest logo
   - sha: aae2939c730f063d45503b5eff83c91218e5215b
