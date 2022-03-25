@@ -172,6 +172,131 @@ ___TEMPLATE_PARAMETERS___
       }
     ]
   },
+  {
+    "type": "TEXT",
+    "name": "bambuserOrgId",
+    "displayName": "Bambuser Organisation ID",
+    "simpleValueType": true,
+    "help": "You should receive an organisation id form your Bambuser contact",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "oneToOneIntegration",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "TEXT",
+    "name": "locale",
+    "displayName": "Locale",
+    "simpleValueType": true,
+    "valueHint": "e.g: en-US, en-GB, sv-SE",
+    "help": "We are using INTL to parse locale https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "oneToOneIntegration",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "overlayWidget",
+    "displayName": "Overlay Widget",
+    "groupStyle": "ZIPPY_OPEN",
+    "subParams": [
+      {
+        "type": "SELECT",
+        "name": "overlayWidgetVariant",
+        "displayName": "Choose overlay widget type",
+        "macrosInSelect": false,
+        "selectItems": [
+          {
+            "value": "Avatar",
+            "displayValue": "Avatar"
+          },
+          {
+            "value": "Side dock",
+            "displayValue": "Side dock"
+          },
+          {
+            "value": "none",
+            "displayValue": "None"
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": []
+      },
+      {
+        "type": "TEXT",
+        "name": "overlayWidgetPopupTimeout",
+        "displayName": "Time to wait before showing overlay widget first time",
+        "simpleValueType": true,
+        "defaultValue": 2,
+        "enablingConditions": [
+          {
+            "paramName": "overlayWidgetVariant",
+            "paramValue": "none",
+            "type": "NOT_EQUALS"
+          }
+        ],
+        "valueValidators": [
+          {
+            "type": "NON_NEGATIVE_NUMBER"
+          }
+        ],
+        "valueUnit": "seconds"
+      }
+    ],
+    "help": "Have a floating widget on your site for your customers to interact with. Learn more here: https://bambuser.com/docs/one-to-one/overlay-widget",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "oneToOneIntegration",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "Advanced Bambuser Features",
+    "displayName": "Advanced One-to-One Features",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "CHECKBOX",
+        "name": "datalayerTracking",
+        "checkboxText": "Track Bambuser events to the datalayer",
+        "simpleValueType": true,
+        "help": "These events will allow you to track user interactions. Check out our guide to pipe all these straight into Google Analytics: https://bambuser.com/docs/one-to-one/one-to-one-gtm-ga4",
+        "defaultValue": true
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "ecommerceTracking",
+        "checkboxText": "Let Bambuser trigger ecommerce events",
+        "simpleValueType": true,
+        "help": "Bambuser track standard GA4 ecommerce events by default so that you can follow user funnels and conversions in Google Analytics. Learn more here: https://bambuser.com/docs/one-to-one/one-to-one-gtm-ga4",
+        "defaultValue": true,
+        "enablingConditions": []
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "launchInDebugMode",
+        "checkboxText": "Launch in Debug Mode",
+        "simpleValueType": true,
+        "help": "Launching in debug mode will expose the oneToOneEmbed instance on the window for you to be able to inspect in the developer console"
+      }
+    ],
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "oneToOneIntegration",
+        "type": "EQUALS"
+      }
+    ]
   }
 ]
 
