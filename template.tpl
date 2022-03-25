@@ -314,11 +314,16 @@ const injectScript = require('injectScript');
 const queryPermission = require('queryPermission');
 const copyFromWindow = require('copyFromWindow');
 const logToConsole = require('logToConsole');
+const callInWindow = require('callInWindow');
+const makeInteger = require('makeInteger');
+
 
 // If the user chose to log debug output, initialize the logging method
 const log = data.debug
   ? logToConsole
   : function () {};
+
+if (data.feature === 'conversationTracker') {
 
 // Get the URL the user input into the text field
 const url = data.scriptUrl || 'https://cdn.liveshopping.bambuser.com/metrics/bambuser.min.js';
@@ -361,6 +366,54 @@ if (queryPermission('inject_script', url)) {
   injectScript(url, onSuccess, onFailure);
 } else {
   log('🧪 Bambuser Debugger 🧪\n', '🚫 Script load failed due to permissions mismatch. You may need to whitelist your custom script URL ('+ url +') in the template setting > permissions > Allowed URL match patterns.');
+  data.gtmOnFailure();
+}
+} else if (data.feature === 'oneToOneIntegration') {
+  const conf = {
+    orgId: data.bambuserOrgId,
+    triggers: ['manual', 'connect-link', 'smart'],
+    smartVariantOverride: data.overlayWidgetVariant,
+    popupTimeoutSeconds: makeInteger(data.overlayWidgetPopupTimeuot) || 2,
+    datalayerTracking: data.datalayerTracking,
+    ecommerceTracking: data.ecommerceTracking,
+  };
+  
+  if (!!data.queueId) {
+    conf.queue = data.queueId;
+  }
+  if (!!data.locale) {
+    conf.locale = data.locale;
+  }
+
+  const launch = function (debugMode) {
+    if (queryPermission('access_globals', 'execute', 'launchBambuserOneToOne')) {
+      const oneToOneEmbed = callInWindow('launchBambuserOneToOne', conf, debugMode);
+      log('successfully created one-to-one instance');
+      data.gtmOnSuccess();
+    } else {
+      data.gtmOnFailure();
+    }
+  };
+
+  const url = 'https://one-to-one.bambuser.com/embed.js';
+  if (queryPermission('inject_script', url)) {
+    injectScript(
+      url,
+      function () {
+        log('success inject');
+        launch(data.launchInDebugMode);
+      },
+      function () {
+        log('failed inject');
+        data.gtmOnFailure();
+      }
+    );
+  } else {
+    data.gtmOnFailure();
+  }
+
+  return conf;
+} else {
   data.gtmOnFailure();
 }
 
