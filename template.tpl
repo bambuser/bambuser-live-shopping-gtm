@@ -272,6 +272,14 @@ ___TEMPLATE_PARAMETERS___
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
       {
+        "type": "TEXT",
+        "name": "customerData",
+        "displayName": "Customer Data",
+        "simpleValueType": true,
+        "valueHint": "jsonObject",
+        "help": "A jsonObject including information about the customer such as name, email, customer number that will be shown to the agent in the call. Reference: https://bambuser.com/docs/one-to-one/initial-setup#provide-customer-data"
+      },
+      {
         "type": "CHECKBOX",
         "name": "datalayerTracking",
         "checkboxText": "Track Bambuser events to the datalayer",
@@ -316,6 +324,9 @@ const copyFromWindow = require('copyFromWindow');
 const logToConsole = require('logToConsole');
 const callInWindow = require('callInWindow');
 const makeInteger = require('makeInteger');
+const getType = require('getType');
+const JSON = require('JSON');
+const Object = require('Object');
 
 
 // If the user chose to log debug output, initialize the logging method
@@ -378,11 +389,47 @@ if (data.feature === 'conversationTracker') {
     ecommerceTracking: data.ecommerceTracking,
   };
   
+  const cleanNestedData = function (obj) {
+    return Object.entries(obj).reduce(function (acc, item) {
+      const key = item[0];
+      const value = item[1];
+      const itemType = getType(value);
+      if (
+        itemType !== 'object' &&
+        itemType !== 'array' &&
+        itemType !== 'function'
+      ) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+  };
+
+  const parseCustomerData = function (customerData) {
+    const type = getType(customerData);
+    if (type === 'string') {
+      const parsed = JSON.parse(customerData);
+      if (!parsed) {
+        return undefined;
+      }
+      return cleanNestedData(parsed);
+    } else if (type === 'object') {
+      return cleanNestedData(customerData);
+    } else if (type === 'function') {
+      return customerData;
+    }
+  };
+
   if (!!data.queueId) {
     conf.queue = data.queueId;
   }
   if (!!data.locale) {
     conf.locale = data.locale;
+  }
+
+  const customerInfo = parseCustomerData(data.customerData);
+  if (!!customerInfo) {
+    conf.data = customerInfo;
   }
 
   const launch = function (debugMode) {
