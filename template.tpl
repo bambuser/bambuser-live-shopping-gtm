@@ -325,49 +325,49 @@ const log = data.debug
 
 if (data.feature === 'conversationTracker') {
 
-// Get the URL the user input into the text field
-const url = data.scriptUrl || 'https://cdn.liveshopping.bambuser.com/metrics/bambuser.min.js';
+  // Get the URL the user input into the text field
+  const url = data.scriptUrl || 'https://cdn.liveshopping.bambuser.com/metrics/bambuser.min.js';
 
-log('🧪 Bambuser Debugger 🧪\n', '🏁 Bambuser purchase tracker started with the given tag data: ', data);
+  log('🧪 Bambuser Debugger 🧪\n', '🏁 Bambuser purchase tracker started with the given tag data: ', data);
 
-// If the script loaded successfully, log a message and signal success
-const onSuccess = () => {
-  log('🧪 Bambuser Debugger 🧪\n', '✅ Tracking Library loaded successfully.');
-  var bbu = copyFromWindow('_bambuser');
-  if (typeof bbu === 'object') {
-    var eventData = {};
-    eventData[bbu.params.EVENT.dataSelector] = 'purchase';
-    eventData[bbu.params.ORDER_ID.dataSelector] = data.orderId;
-    eventData[bbu.params.ORDER_VALUE.dataSelector] = data.orderValue;
-    eventData[bbu.params.CURRENCY.dataSelector] = data.currency;
-    eventData[bbu.params.ORDER_PRODUCTIDS.dataSelector] = data.productIds;
+  // If the script loaded successfully, log a message and signal success
+  const onSuccess = () => {
+    log('🧪 Bambuser Debugger 🧪\n', '✅ Tracking Library loaded successfully.');
+    var bbu = copyFromWindow('_bambuser');
+    if (typeof bbu === 'object') {
+      var eventData = {};
+      eventData[bbu.params.EVENT.dataSelector] = 'purchase';
+      eventData[bbu.params.ORDER_ID.dataSelector] = data.orderId;
+      eventData[bbu.params.ORDER_VALUE.dataSelector] = data.orderValue;
+      eventData[bbu.params.CURRENCY.dataSelector] = data.currency;
+      eventData[bbu.params.ORDER_PRODUCTIDS.dataSelector] = data.productIds;
 
-    bbu.collect(eventData);
-    log('🧪 Bambuser Debugger 🧪\n', '✅ Purchase has been tracked successfully with the following order data:', eventData);
-    // Call data.gtmOnSuccess when the tag is finished.
-    data.gtmOnSuccess();
-  }
-  else {
-    log('🧪 Bambuser Debugger 🧪\n', '❌ Problem with loading the library: ', bbu);
+      bbu.collect(eventData);
+      log('🧪 Bambuser Debugger 🧪\n', '✅ Purchase has been tracked successfully with the following order data:', eventData);
+      // Call data.gtmOnSuccess when the tag is finished.
+      data.gtmOnSuccess();
+    }
+    else {
+      log('🧪 Bambuser Debugger 🧪\n', '❌ Problem with loading the library: ', bbu);
+      data.gtmOnFailure();
+    }
+  };
+
+  // If the script fails to load, log a message and signal failure
+  const onFailure = () => {
+    log('🧪 Bambuser Debugger 🧪\n', '❌ Script load failed.');
+    data.gtmOnFailure();
+  };
+
+  // If the URL input by the user matches the permissions set for the template,
+  // inject the script with the onSuccess and onFailure methods as callbacks.
+  if (queryPermission('inject_script', url)) {
+    log('🧪 Bambuser Debugger 🧪\n', '🔄 Loading the tracking library from ' + url);
+    injectScript(url, onSuccess, onFailure);
+  } else {
+    log('🧪 Bambuser Debugger 🧪\n', '🚫 Script load failed due to permissions mismatch. You may need to whitelist your custom script URL ('+ url +') in the template setting > permissions > Allowed URL match patterns.');
     data.gtmOnFailure();
   }
-};
-
-// If the script fails to load, log a message and signal failure
-const onFailure = () => {
-  log('🧪 Bambuser Debugger 🧪\n', '❌ Script load failed.');
-  data.gtmOnFailure();
-};
-
-// If the URL input by the user matches the permissions set for the template,
-// inject the script with the onSuccess and onFailure methods as callbacks.
-if (queryPermission('inject_script', url)) {
-  log('🧪 Bambuser Debugger 🧪\n', '🔄 Loading the tracking library from ' + url);
-  injectScript(url, onSuccess, onFailure);
-} else {
-  log('🧪 Bambuser Debugger 🧪\n', '🚫 Script load failed due to permissions mismatch. You may need to whitelist your custom script URL ('+ url +') in the template setting > permissions > Allowed URL match patterns.');
-  data.gtmOnFailure();
-}
 } else if (data.feature === 'oneToOneIntegration') {
   const conf = {
     orgId: data.bambuserOrgId,
