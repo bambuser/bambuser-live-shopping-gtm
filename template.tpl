@@ -31,6 +31,23 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
+    "type": "RADIO",
+    "name": "feature",
+    "radioItems": [
+      {
+        "value": "conversionTracker",
+        "displayValue": "Conversion Tracker"
+      },
+      {
+        "value": "oneToOneIntegration",
+        "displayValue": "One-to-One Integration"
+      }
+    ],
+    "simpleValueType": true,
+    "defaultValue": "conversionTracker",
+    "displayName": "Feature"
+  },
+  {
     "type": "TEXT",
     "name": "orderId",
     "displayName": "Order ID",
@@ -41,6 +58,13 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "NON_EMPTY",
         "errorMessage": "You must provide a value"
+      }
+    ],
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "conversionTracker",
+        "type": "EQUALS"
       }
     ]
   },
@@ -56,6 +80,13 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY",
         "errorMessage": "You must provide an Order Value"
       }
+    ],
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "conversionTracker",
+        "type": "EQUALS"
+      }
     ]
   },
   {
@@ -70,6 +101,13 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY",
         "errorMessage": "You must provide Product IDs"
       }
+    ],
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "conversionTracker",
+        "type": "EQUALS"
+      }
     ]
   },
   {
@@ -83,6 +121,13 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "NON_EMPTY",
         "errorMessage": "You must provide a Currency"
+      }
+    ],
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "conversionTracker",
+        "type": "EQUALS"
       }
     ]
   },
@@ -118,7 +163,15 @@ ___TEMPLATE_PARAMETERS___
         "help": "Do not write anything here unless you have been given a custom tracking library URL!"
       }
     ],
-    "groupStyle": "ZIPPY_CLOSED"
+    "groupStyle": "ZIPPY_CLOSED",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "conversionTracker",
+        "type": "EQUALS"
+      }
+    ]
+  },
   }
 ]
 
