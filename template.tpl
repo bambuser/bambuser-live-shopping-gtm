@@ -14,7 +14,13 @@ ___INFO___
   "version": 1,
   "securityGroups": [],
   "displayName": "Bambuser Live Shopping",
-  "categories": ["ANALYTICS", "MARKETING"],
+  "categories": [
+    "ANALYTICS", 
+    "MARKETING",
+    "CHAT",
+    "SALES",
+    "PERSONALIZATION"
+  ],
   "brand": {
     "id": "github.com_bambuser",
     "displayName": "bambuser",
