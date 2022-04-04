@@ -387,6 +387,7 @@ if (data.feature === 'conversationTracker') {
     popupTimeoutSeconds: makeInteger(data.overlayWidgetPopupTimeuot) || 2,
     datalayerTracking: data.datalayerTracking,
     ecommerceTracking: data.ecommerceTracking,
+    allowFirstPartyCookies: false,
   };
   
   const cleanNestedData = function (obj) {
