@@ -344,6 +344,7 @@ const logToConsole = require('logToConsole');
 const callInWindow = require('callInWindow');
 const makeInteger = require('makeInteger');
 const getType = require('getType');
+const getContainerVersion = require('getContainerVersion');
 const JSON = require('JSON');
 const Object = require('Object');
 
@@ -399,6 +400,8 @@ if (data.feature === 'conversationTracker') {
     data.gtmOnFailure();
   }
 } else if (data.feature === 'oneToOneIntegration') {
+
+  const gtmInfo = getContainerVersion();
   const conf = {
     orgId: data.bambuserOrgId,
     triggers: ['manual', 'connect-link', 'smart'],
@@ -407,6 +410,7 @@ if (data.feature === 'conversationTracker') {
     datalayerTracking: data.datalayerTracking,
     ecommerceTracking: data.ecommerceTracking,
     allowFirstPartyCookies: false,
+    gtmContainerInfo: gtmInfo,
   };
   
   const cleanNestedData = function (obj) {
@@ -637,6 +641,16 @@ ___WEB_PERMISSIONS___
     },
     "clientAnnotations": {
       "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "read_container_data",
+        "versionId": "1"
+      },
+      "param": []
     },
     "isRequired": true
   }
