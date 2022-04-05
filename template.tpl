@@ -462,7 +462,12 @@ if (data.feature === 'conversationTracker') {
     }
   };
 
-  const url = 'https://one-to-one.bambuser.com/embed.js';
+  // US is the default region
+  let url = 'https://one-to-one.bambuser.com/embed.js'; 
+  if(data.region === 'EU') {
+    url = 'https://one-to-one.bambuser.com/eu/embed.js';
+  }
+
   if (queryPermission('inject_script', url)) {
     injectScript(
       url,
