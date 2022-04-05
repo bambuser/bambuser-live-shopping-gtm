@@ -302,6 +302,25 @@ ___TEMPLATE_PARAMETERS___
         "checkboxText": "Launch in Debug Mode",
         "simpleValueType": true,
         "help": "Launching in debug mode will expose the oneToOneEmbed instance on the window for you to be able to inspect in the developer console"
+      },
+      {
+        "type": "SELECT",
+        "name": "region",
+        "displayName": "Region",
+        "macrosInSelect": false,
+        "selectItems": [
+          {
+            "value": "US",
+            "displayValue": "US"
+          },
+          {
+            "value": "EU",
+            "displayValue": "EU"
+          }
+        ],
+        "simpleValueType": true,
+        "help": "This should match the region of your Bambuser dashboard. If you don\u0027t know, ask your Bambuser contact.",
+        "defaultValue": "US"
       }
     ],
     "enablingConditions": [
