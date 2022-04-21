@@ -354,7 +354,7 @@ const log = data.debug
   ? logToConsole
   : function () {};
 
-if (data.feature === 'conversationTracker') {
+if (data.feature === 'conversionTracker') {
 
   // Get the URL the user input into the text field
   const url = data.scriptUrl || 'https://cdn.liveshopping.bambuser.com/metrics/bambuser.min.js';
