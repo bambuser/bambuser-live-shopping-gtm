@@ -375,6 +375,8 @@ const getType = require('getType');
 const getContainerVersion = require('getContainerVersion');
 const JSON = require('JSON');
 const Object = require('Object');
+const addConsentListener = require('addConsentListener');
+const isConsentGranted = require('isConsentGranted');
 
 
 // If the user chose to log debug output, initialize the logging method
@@ -428,6 +430,10 @@ if (data.feature === 'conversionTracker') {
     data.gtmOnFailure();
   }
 } else if (data.feature === 'oneToOneIntegration') {
+  let allowFirstPartyCookies = false;
+  if (queryPermission('access_consent', 'analytics_storage', 'read')) {
+	allowFirstPartyCookies = !!isConsentGranted('analytics_storage');
+  }
 
   const gtmInfo = getContainerVersion();
   const conf = {
@@ -439,7 +445,7 @@ if (data.feature === 'conversionTracker') {
     popupTimeoutSeconds: makeInteger(data.overlayWidgetPopupTimeuot) || 2,
     datalayerTracking: data.datalayerTracking,
     ecommerceTracking: data.ecommerceTracking,
-    allowFirstPartyCookies: false,
+    allowFirstPartyCookies: allowFirstPartyCookies,
     gtmContainerInfo: gtmInfo,
   };
   
@@ -490,6 +496,15 @@ if (data.feature === 'conversionTracker') {
     if (queryPermission('access_globals', 'execute', 'launchBambuserOneToOne')) {
       const oneToOneEmbed = callInWindow('launchBambuserOneToOne', conf, debugMode);
       log('successfully created one-to-one instance');
+      if (queryPermission('access_consent', 'analytics_storage', 'read')) {
+        addConsentListener('analytics_storage', (_, granted) => {
+          if (oneToOneEmbed.config.allowFirstPartyCookies !== granted) {
+            log('Detected consent change, will update widget');
+            oneToOneEmbed.config.allowFirstPartyCookies = granted;
+            oneToOneEmbed.loadConfig(oneToOneEmbed.config);
+          }
+        });
+      }
       data.gtmOnSuccess();
     } else {
       data.gtmOnFailure();
@@ -681,6 +696,59 @@ ___WEB_PERMISSIONS___
         "versionId": "1"
       },
       "param": []
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "access_consent",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "consentTypes",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "analytics_storage"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
     },
     "isRequired": true
   }
