@@ -208,6 +208,20 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "TEXT",
+    "name": "queue",
+    "displayName": "Queue",
+    "simpleValueType": true,
+    "help": "Optional to provide a queue that would be used for a drop-in call. Provide the ID or the name of the queue, both can be found in your Bambuser dashboard. Leaving empty will use the default queue",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "oneToOneIntegration",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "TEXT",
     "name": "locale",
     "displayName": "Locale",
     "simpleValueType": true,
@@ -419,6 +433,7 @@ if (data.feature === 'conversionTracker') {
   const conf = {
     orgId: data.bambuserOrgId,
     themeId: data.themeId,
+    queue: data.queue,
     triggers: ['manual', 'connect-link', 'smart'],
     smartVariantOverride: data.overlayWidgetVariant,
     popupTimeoutSeconds: makeInteger(data.overlayWidgetPopupTimeuot) || 2,
