@@ -15,7 +15,7 @@ ___INFO___
   "securityGroups": [],
   "displayName": "Bambuser Live Shopping",
   "categories": [
-    "ANALYTICS", 
+    "ANALYTICS",
     "MARKETING",
     "CHAT",
     "SALES",
@@ -659,7 +659,6 @@ ___WEB_PERMISSIONS___
 
 ___TESTS___
 
-
 scenarios:
 - name: Can inject script
   code: |-
@@ -769,7 +768,6 @@ scenarios:
     // Verify that the tag finished successfully.
     assertThat(config.data).isUndefined();
     assertApi('callInWindow').wasCalled();
-
 
 
 ___NOTES___
