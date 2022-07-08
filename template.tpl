@@ -194,6 +194,20 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "TEXT",
+    "name": "themeId",
+    "displayName": "Theme ID",
+    "simpleValueType": true,
+    "help": "Optional to apply a specific theme, you would get the theme ID from your Bambuser contact",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "oneToOneIntegration",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "TEXT",
     "name": "locale",
     "displayName": "Locale",
     "simpleValueType": true,
@@ -404,6 +418,7 @@ if (data.feature === 'conversionTracker') {
   const gtmInfo = getContainerVersion();
   const conf = {
     orgId: data.bambuserOrgId,
+    themeId: data.themeId,
     triggers: ['manual', 'connect-link', 'smart'],
     smartVariantOverride: data.overlayWidgetVariant,
     popupTimeoutSeconds: makeInteger(data.overlayWidgetPopupTimeuot) || 2,
