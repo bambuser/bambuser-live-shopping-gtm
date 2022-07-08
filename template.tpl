@@ -380,7 +380,7 @@ const isConsentGranted = require('isConsentGranted');
 
 
 // If the user chose to log debug output, initialize the logging method
-const log = data.debug
+const log = data.debug || data.launchInDebugMode
   ? logToConsole
   : function () {};
 
