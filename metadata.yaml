@@ -15,6 +15,8 @@
 homepage: "https://bambuser.com"
 documentation: "https://bambuser.com/docs"
 versions:
+  - sha: 79f2e1784e0a51d1872a551e36b6520cd0604097
+    changeNote: Support consent API and add new fields for theme and queue 
   - sha: 968f9a4f6b86fc4d67d58146bedea37685753f29
     changeNote: Fix typo for Conversion Tracker 
   - sha: cb684d6c8be6dbf6ff6518cbcc00889592a1b5dc
