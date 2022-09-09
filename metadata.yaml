@@ -15,6 +15,8 @@
 homepage: "https://bambuser.com"
 documentation: "https://bambuser.com/docs"
 versions:
+  - sha: ed484758a8eb852f9e2482834c3e62f25e798ff0
+    changeNotes: Add configuration options for datalayer interceptors and exposing of instance
   - sha: 79f2e1784e0a51d1872a551e36b6520cd0604097
     changeNote: Support consent API and add new fields for theme and queue 
   - sha: 968f9a4f6b86fc4d67d58146bedea37685753f29
