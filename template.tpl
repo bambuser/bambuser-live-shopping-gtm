@@ -295,6 +295,168 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "GROUP",
+    "name": "dataLayerMappers",
+    "displayName": "Datalayer Event Strutures",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "GROUP",
+        "name": "addToCart",
+        "displayName": "Add to cart events",
+        "groupStyle": "ZIPPY_CLOSED",
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "addToCartEventName",
+            "displayName": "Event name",
+            "simpleValueType": true,
+            "help": "i.e. addToCart"
+          },
+          {
+            "type": "TEXT",
+            "name": "addToCartSku",
+            "displayName": "SKU / Product id field",
+            "simpleValueType": true,
+            "help": "Note that you are supposed to fill in the path to the field and not the current datalayer value. For example, a correct value can be: ecommerce.add.products.0.id. A full guide can be found at https://bambuser.com/docs/one-to-one/install-one-to-one-with-gtm."
+          },
+          {
+            "type": "TEXT",
+            "name": "addToCartProductName",
+            "displayName": "Product name field",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "addToCartPrice",
+            "displayName": "Price field",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "addToCartQuantity",
+            "displayName": "Quantity field",
+            "simpleValueType": true
+          },
+          {
+            "type": "CHECKBOX",
+            "name": "totalQuantityInsteadOfChange",
+            "checkboxText": "Quantity on events is the total and not the change",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "addToCartCurrency",
+            "displayName": "Currency field",
+            "simpleValueType": true
+          }
+        ],
+        "help": ""
+      },
+      {
+        "type": "GROUP",
+        "name": "removeFromCart",
+        "displayName": "Remove from cart events",
+        "groupStyle": "ZIPPY_CLOSED",
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "removeFromCartEventName",
+            "displayName": "Event name",
+            "simpleValueType": true,
+            "help": "i.e. removeFromCart"
+          },
+          {
+            "type": "TEXT",
+            "name": "removeFromCartSku",
+            "displayName": "SKU / Product id field",
+            "simpleValueType": true,
+            "help": "Note that you are supposed to fill in the path to the field and not the current datalayer value. For example, a correct value can be: ecommerce.remove.products.0.id. A full guide can be found at https://bambuser.com/docs/one-to-one/install-one-to-one-with-gtm."
+          },
+          {
+            "type": "TEXT",
+            "name": "removeFromCartProductName",
+            "displayName": "Product name field",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "removeFromCartPrice",
+            "displayName": "Price field",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "removeFromCartQuantity",
+            "displayName": "Quantity field",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "removeFromCartCurrency",
+            "displayName": "Currency field",
+            "simpleValueType": true
+          }
+        ]
+      },
+      {
+        "type": "GROUP",
+        "name": "viewItem",
+        "displayName": "Product impression event",
+        "groupStyle": "ZIPPY_CLOSED",
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "viewItemEventName",
+            "displayName": "Event name",
+            "simpleValueType": true,
+            "help": "i.e. ProductImpression"
+          },
+          {
+            "type": "TEXT",
+            "name": "viewItemSku",
+            "displayName": "SKU / Product id field",
+            "simpleValueType": true,
+            "help": "Note that you are supposed to fill in the path to the field and not the current datalayer value. For example, a correct value can be: ecommerce.products.0.id. A full guide can be found at https://bambuser.com/docs/one-to-one/install-one-to-one-with-gtm."
+          },
+          {
+            "type": "TEXT",
+            "name": "viewItemProductName",
+            "displayName": "Product name field",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "viewItemBrand",
+            "displayName": "Brand field",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "viewItemPrice",
+            "displayName": "Price field",
+            "simpleValueType": true
+          },
+          {
+            "type": "TEXT",
+            "name": "viewItemCurrency",
+            "displayName": "Currency field",
+            "simpleValueType": true
+          }
+        ],
+        "help": ""
+      }
+    ],
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "oneToOneIntegration",
+        "type": "EQUALS"
+      }
+    ],
+    "help": "Bambuser can listen to events in your datalayer to create a more integrated feel of the experience when allowing the co-browsing feature. If you already follow google analytics 4 ecommerce event standard it will just work out of the box. However, if you have another data format of your events, you can here configure where we can find the required fields in your datalayer in order to achieve the same functionality.  See GA4 standard here: https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type\u003dgtm"
+  },
+  {
+    "type": "GROUP",
     "name": "Advanced Bambuser Features",
     "displayName": "Advanced One-to-One Features",
     "groupStyle": "ZIPPY_CLOSED",
@@ -368,6 +530,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const injectScript = require('injectScript');
 const queryPermission = require('queryPermission');
 const copyFromWindow = require('copyFromWindow');
+const setInWindow = require('setInWindow');
 const logToConsole = require('logToConsole');
 const callInWindow = require('callInWindow');
 const makeInteger = require('makeInteger');
@@ -435,6 +598,38 @@ if (data.feature === 'conversionTracker') {
 	allowFirstPartyCookies = !!isConsentGranted('analytics_storage');
   }
 
+  const customInterceptor = {};
+  if (!!data.addToCartEventName) {
+    customInterceptor.add_to_cart = {
+      eventName: data.addToCartEventName,
+      sku: data.addToCartSku,
+      name: data.addToCartProductName,
+      price: data.addToCartPrice,
+      quantity: data.addToCartQuantity,
+      currency: data.addToCartCurrency
+    };
+  }
+  if (!!data.removeFromCartEventName) {
+    customInterceptor.remove_from_cart = {
+      eventname: data.removeFromCartEventName,
+      sku: data.removeFromCartSku,
+      name: data.removeFromCartProductName,
+      price: data.removeFromCartPrice,
+      quantity: data.removeFromCartQuantity,
+      currency: data.removeFromCartCurrency
+    };
+  }
+  if (!!data.viewItemEventName) {
+    customInterceptor.view_item = {
+      eventname: data.viewItemEventName,
+      sku: data.viewItemSku,
+      name: data.viewItemProductName,
+      price: data.viewItemPrice,
+      brand: data.viewItemBrand,
+      currency: data.viewItemCurrency
+    };
+  }
+      
   const gtmInfo = getContainerVersion();
   const conf = {
     orgId: data.bambuserOrgId,
@@ -447,6 +642,7 @@ if (data.feature === 'conversionTracker') {
     ecommerceTracking: data.ecommerceTracking,
     allowFirstPartyCookies: allowFirstPartyCookies,
     gtmContainerInfo: gtmInfo,
+    customInterceptor: customInterceptor,
   };
   
   const cleanNestedData = function (obj) {
