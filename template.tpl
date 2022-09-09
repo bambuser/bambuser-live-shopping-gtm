@@ -505,6 +505,16 @@ if (data.feature === 'conversionTracker') {
           }
         });
       }
+      if (queryPermission('access_globals', 'readwrite', '_bambuser')) {
+        var _bambuser = copyFromWindow('_bambuser');
+        var bbu = {};
+        if (typeof _bambuser === 'object') {
+          bbu = _bambuser;
+        }
+        bbu.oneToOneEmbed = oneToOneEmbed;
+        setInWindow('_bambuser', bbu);
+      }
+      
       data.gtmOnSuccess();
     } else {
       data.gtmOnFailure();
