@@ -256,6 +256,10 @@ ___TEMPLATE_PARAMETERS___
             "displayValue": "Side dock"
           },
           {
+            "value": "Video",
+            "displayValue": "Video"
+          },
+          {
             "value": "none",
             "displayValue": "None"
           }
