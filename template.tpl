@@ -101,6 +101,31 @@ ___TEMPLATE_PARAMETERS___
         "subParams": [
           {
             "type": "LABEL",
+            "name": "dataRegionLabel",
+            "displayName": "Region"
+          },
+          {
+            "type": "RADIO",
+            "name": "dataRegion",
+            "displayName": "Select the Bambuser account region",
+            "radioItems": [
+              {
+                "value": "us",
+                "displayValue": "Global (US)",
+                "help": "If you log in to the Bambuser dashboard through https://lcx.bambuser.com, your account must be in the Global environment."
+              },
+              {
+                "value": "eu",
+                "displayValue": "EU-restricted",
+                "help": "If you log in to the Bambuser dashboard through https://lcx-\u003cstrong\u003eeu\u003c/strong\u003e.bambuser.com, your account must be in the EU environment."
+              }
+            ],
+            "simpleValueType": true,
+            "help": "Make sure you set the correct region. If wrong region is selected, we are not able to attribute the tracked data to your account.",
+            "clearOnCopy": true
+          },
+          {
+            "type": "LABEL",
             "name": "debugLabel",
             "displayName": "Debugging"
           },
@@ -507,9 +532,13 @@ const log = data.debug || data.launchInDebugMode
 
 if (data.feature === 'conversionTracker') {
 
-  // Get the URL the user input into the text field
-  const url = data.scriptUrl || 'https://cdn.liveshopping.bambuser.com/metrics/bambuser.min.js';
-  
+  // Constants
+  const TRACKING_LIBRARY_URL_GLOBAL = 'https://cdn.liveshopping.bambuser.com/metrics/bambuser.min.js';
+  const TRACKING_LIBRARY_URL_EU = 'https://cdn.liveshopping.bambuser.com/metrics/bambuser-eu.min.js';
+
+  // Tracking library URL: Use user-inserted URL, otherwise, use the default region-specific URL.
+  const url = data.scriptUrl || (data.dataRegion == 'eu' ? TRACKING_LIBRARY_URL_EU : TRACKING_LIBRARY_URL_GLOBAL);
+
   log('🧪 Bambuser Debugger 🧪\n', '🏁 Bambuser purchase tracker started with the given tag data: ', data);
 
   // If the script loaded successfully, log a message and signal success
