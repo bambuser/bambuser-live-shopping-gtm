@@ -15,6 +15,10 @@
 homepage: "https://bambuser.com"
 documentation: "https://bambuser.com/docs"
 versions:
+  - sha: 3b68bb28e0ba215cb3b8bffdda54bb40ad971a1e
+    changeNotes: |2
+      Add region selector to Conversion Tracking
+      Restructure fields in groups
   - sha: 957677afd89c9b8ecc37db49aa5050d52fab926f
     changeNotes: Add Video as an overlay widget type
   - sha: ed484758a8eb852f9e2482834c3e62f25e798ff0
