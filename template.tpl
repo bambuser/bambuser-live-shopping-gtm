@@ -46,7 +46,7 @@ ___TEMPLATE_PARAMETERS___
       },
       {
         "value": "oneToOneIntegration",
-        "displayValue": "One-to-One Integration"
+        "displayValue": "Video Consultation"
       }
     ],
     "simpleValueType": true,
