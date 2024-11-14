@@ -47,6 +47,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "value": "oneToOneIntegration",
         "displayValue": "Video Consultation"
+      },
+      {
+        "value": "vod",
+        "displayValue": "Shoppable Video"
       }
     ],
     "simpleValueType": true,
@@ -188,6 +192,11 @@ ___TEMPLATE_PARAMETERS___
       {
         "paramName": "feature",
         "paramValue": "oneToOneIntegration",
+        "type": "EQUALS"
+      },
+      {
+        "paramName": "feature",
+        "paramValue": "vod",
         "type": "EQUALS"
       }
     ]
@@ -524,6 +533,107 @@ ___TEMPLATE_PARAMETERS___
         "type": "EQUALS"
       }
     ]
+  },
+  {
+    "type": "SELECT",
+    "name": "dataRegion",
+    "displayName": "Data region",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "value": "US",
+        "displayValue": "US"
+      },
+      {
+        "value": "EU",
+        "displayValue": "EU"
+      }
+    ],
+    "simpleValueType": true,
+    "defaultValue": "US",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "vod",
+        "type": "EQUALS"
+      }
+    ],
+    "help": "Your BamHub data region"
+  },
+  {
+    "type": "SIMPLE_TABLE",
+    "name": "vodContainers",
+    "displayName": "Playlists",
+    "simpleTableColumns": [
+      {
+        "defaultValue": "",
+        "displayName": "Selector",
+        "name": "selector",
+        "type": "TEXT",
+        "valueValidators": [
+          {
+            "type": "STRING_LENGTH",
+            "args": [
+              2,
+              100
+            ]
+          }
+        ],
+        "valueHint": ""
+      },
+      {
+        "defaultValue": "",
+        "displayName": "Relative position to selector",
+        "name": "position",
+        "type": "SELECT",
+        "selectItems": [
+          {
+            "value": "beforebegin",
+            "displayValue": "Before selector"
+          },
+          {
+            "value": "afterbegin",
+            "displayValue": "Inside selector at top"
+          },
+          {
+            "value": "beforeend",
+            "displayValue": "Inside selector at bottom"
+          },
+          {
+            "value": "afterend",
+            "displayValue": "After selector"
+          }
+        ]
+      },
+      {
+        "defaultValue": "",
+        "displayName": "Playlist id (optional)",
+        "name": "playlistId",
+        "type": "TEXT"
+      }
+    ],
+    "newRowButtonText": "Add playlist",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "vod",
+        "type": "EQUALS"
+      }
+    ],
+    "notSetText": "Add playlists to inject shoppable videos on your page",
+    "help": "A playlist element can be added on a relative position to some other element on your page. For example, to add inside a div tag with the class product-description, use the selector .product-description and set a position."
+  },
+  {
+    "type": "LABEL",
+    "name": "Playlist id description",
+    "displayName": "In case you have multiple playlists on the same page, you may want to set explicit playlist ids to ensure the correct videos end up in the intended playlist. Learn more here: https://bambuser.com/docs/shoppable-video/bam-playlist-integration#multiple-playlists-on-one-page",
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "vod",
+        "type": "EQUALS"
+      }
+    ]
   }
 ]
 
@@ -744,6 +854,42 @@ if (data.feature === 'conversionTracker') {
   }
 
   return conf;
+} else if (data.feature === 'vod') {
+  
+  const conf = {
+    orgId: data.bambuserOrgId,
+    containers: data.vodContainers
+  };
+  const launch = function () {
+    if (queryPermission('access_globals', 'execute', 'injectBambuserPlayer')) {
+      callInWindow('injectBambuserPlayer', conf);
+      data.gtmOnSuccess();
+    } else {
+      data.gtmOnFailure();
+    }
+  };
+  // US is the default region
+  let url = 'https://lcx-embed.bambuser.com/default/embed.js';
+  if(data.dataRegion === 'EU') {
+    url = 'https://lcx-embed-eu.bambuser.com/default/embed.js';
+  }
+
+  if (queryPermission('inject_script', url)) {
+    injectScript(
+      url,
+      function () {
+        log('success inject');
+        launch();
+      },
+      function () {
+        log('failed inject');
+        data.gtmOnFailure();
+      }
+    );
+  } else {
+    data.gtmOnFailure();
+  }
+  
 } else {
   data.gtmOnFailure();
 }
@@ -848,6 +994,45 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 1,
                     "string": "launchBambuserOneToOne"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "injectBambuserPlayer"
                   },
                   {
                     "type": 8,
