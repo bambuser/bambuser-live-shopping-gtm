@@ -15,6 +15,8 @@
 homepage: "https://bambuser.com"
 documentation: "https://bambuser.com/docs"
 versions:
+  - sha: 442eda98741e59958558eb35da7b0eaa82aba8f9
+    changeNotes: Fix conflict of writing to global _bambuser object
   - sha: a36da923115f63aadbddc84df4a656462c20c4f5
     changeNotes: Update product naming and add support for Shoppable Videos
   - sha: 957677afd89c9b8ecc37db49aa5050d52fab926f
