@@ -822,7 +822,7 @@ if (data.feature === 'conversionTracker') {
           bbu = _bambuser;
         }
         bbu.oneToOneEmbed = oneToOneEmbed;
-        setInWindow('_bambuser', bbu);
+        setInWindow('_bambuser', bbu, true);
       }
       
       data.gtmOnSuccess();
