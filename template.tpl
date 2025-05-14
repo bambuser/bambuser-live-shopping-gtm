@@ -41,8 +41,8 @@ ___TEMPLATE_PARAMETERS___
     "name": "feature",
     "radioItems": [
       {
-        "value": "conversionTracker",
-        "displayValue": "Conversion Tracker"
+        "value": "ecomTracker",
+        "displayValue": "Shopper Events Tracking"
       },
       {
         "value": "oneToOneIntegration",
