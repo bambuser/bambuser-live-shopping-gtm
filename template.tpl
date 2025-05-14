@@ -51,6 +51,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "value": "vod",
         "displayValue": "Shoppable Video"
+      },
+      {
+        "value": "conversionTracker",
+        "displayValue": "Legacy Conversion Tracker"
       }
     ],
     "simpleValueType": true,
@@ -662,6 +666,7 @@ const log = data.debug || data.launchInDebugMode
   : function () {};
 
 if (data.feature === 'conversionTracker') {
+  // LEGACY Conversion tracker
 
   // Get the URL the user input into the text field
   const url = data.scriptUrl || 'https://cdn.liveshopping.bambuser.com/metrics/bambuser.min.js';
