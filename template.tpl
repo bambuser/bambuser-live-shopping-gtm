@@ -37,9 +37,10 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "type": "RADIO",
+    "type": "SELECT",
     "name": "feature",
-    "radioItems": [
+    "displayName": "Feature",
+    "selectItems": [
       {
         "value": "ecomTracker",
         "displayValue": "Shopper Events Tracking"
@@ -59,7 +60,6 @@ ___TEMPLATE_PARAMETERS___
     ],
     "simpleValueType": true,
     "defaultValue": "conversionTracker",
-    "displayName": "Feature"
   },
   {
     "type": "TEXT",
