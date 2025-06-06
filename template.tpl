@@ -266,6 +266,11 @@ ___TEMPLATE_PARAMETERS___
         "paramName": "feature",
         "paramValue": "conversionTracker",
         "type": "EQUALS"
+      },
+      {
+        "paramName": "feature",
+        "paramValue": "ecomTracker",
+        "type": "EQUALS"
       }
     ]
   },
