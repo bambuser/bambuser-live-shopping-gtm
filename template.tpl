@@ -59,7 +59,7 @@ ___TEMPLATE_PARAMETERS___
       }
     ],
     "simpleValueType": true,
-    "defaultValue": "conversionTracker",
+    "defaultValue": "ecomTracker"
   },
   {
     "type": "SELECT",
