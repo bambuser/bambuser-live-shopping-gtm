@@ -62,6 +62,89 @@ ___TEMPLATE_PARAMETERS___
     "defaultValue": "conversionTracker",
   },
   {
+    "type": "SELECT",
+    "name": "ecomEventName",
+    "displayName": "Event name",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "value": "purchase",
+        "displayValue": "Purchase"
+      },
+      {
+        "value": "add-to-cart",
+        "displayValue": "Add to Cart"
+      },
+      {
+        "value": "update-cart",
+        "displayValue": "Update Cart"
+      },
+      {
+        "value": "add-to-wishlist",
+        "displayValue": "Add to Wishlist"
+      },
+      {
+        "value": "remove-from-wishlist",
+        "displayValue": "Remove from Wishlist"
+      },
+      {
+        "value": "product-view",
+        "displayValue": "Product View"
+      },
+      {
+        "value": "refund",
+        "displayValue": "Refund"
+      }
+    ],
+    "simpleValueType": true,
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "ecomTracker",
+        "type": "EQUALS"
+      }
+    ],
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "defaultValue": "purchase"
+  },
+  {
+    "type": "TEXT",
+    "name": "transactionObject",
+    "displayName": "Transaction Object",
+    "simpleValueType": true,
+    "enablingConditions": [
+      {
+        "paramName": "ecomEventName",
+        "paramValue": "purchase",
+        "type": "EQUALS"
+      },
+      {
+        "paramName": "ecomEventName",
+        "paramValue": "refund",
+        "type": "EQUALS"
+      }
+    ],
+    "help": "Provide a custom javascript variable object that specifies information about the transaction: \nhttps://bambuser.com/docs/live/shopper-events-tracking/#transaction-object"
+  },
+  {
+    "type": "TEXT",
+    "name": "products",
+    "displayName": "Products array",
+    "simpleValueType": true,
+    "enablingConditions": [
+      {
+        "paramName": "feature",
+        "paramValue": "ecomTracker",
+        "type": "EQUALS"
+      }
+    ],
+    "help": "Provide a custom javascript variable object that specifies information about the products:  https://bambuser.com/docs/live/shopper-events-tracking/#product-object"
+  },
+  {
     "type": "TEXT",
     "name": "orderId",
     "displayName": "Order ID",
@@ -665,7 +748,60 @@ const log = data.debug || data.launchInDebugMode
   ? logToConsole
   : function () {};
 
-if (data.feature === 'conversionTracker') {
+if (data.feature === 'ecomTracker') {
+  // Get the URL the user input into the text field
+  const url = data.scriptUrl || 'https://cdn.liveshopping.bambuser.com/metrics/bambuser.min.js';
+  
+  // If the script loaded successfully, log a message and signal success
+  const onSuccess = () => {
+    log('🧪 Bambuser Debugger 🧪\n', '✅ Tracking Library loaded successfully.');
+    var bbu = copyFromWindow('_bambuser');
+    if (typeof bbu === 'object') {
+      log(data);
+      const gtmInfo = getContainerVersion();
+      const options = {
+        meta: {
+        source: 'gtm-template',
+        customPayload: gtmInfo,
+      }};
+      var eventData = {
+        products: data.products
+      };
+      if (data.ecomEventName === 'purchase' || data.ecomEventName === 'refund') {
+        eventData.transaction = data.transactionObject;
+      }
+      log('Will track data');
+      log(eventData);
+
+      bbu.track(data.ecomEventName, eventData, options).then(() => {
+        log('🧪 Bambuser Debugger 🧪\n', '✅ Tracking successfully sent with the following data:', eventData);
+        data.gtmOnSuccess();
+      }).catch(data.gtmOnFailure);
+      
+    }
+    else {
+      log('🧪 Bambuser Debugger 🧪\n', '❌ Problem with loading the library: ', bbu);
+      data.gtmOnFailure();
+    }
+  };
+
+  // If the script fails to load, log a message and signal failure
+  const onFailure = () => {
+    log('🧪 Bambuser Debugger 🧪\n', '❌ Script load failed.');
+    data.gtmOnFailure();
+  };
+
+  // If the URL input by the user matches the permissions set for the template,
+  // inject the script with the onSuccess and onFailure methods as callbacks.
+  if (queryPermission('inject_script', url)) {
+    log('🧪 Bambuser Debugger 🧪\n', '🔄 Loading the tracking library from ' + url);
+    injectScript(url, onSuccess, onFailure);
+  } else {
+    log('🧪 Bambuser Debugger 🧪\n', '🚫 Script load failed due to permissions mismatch. You may need to whitelist your custom script URL ('+ url +') in the template setting > permissions > Allowed URL match patterns.');
+    data.gtmOnFailure();
+  }
+  
+} else if (data.feature === 'conversionTracker') {
   // LEGACY Conversion tracker
 
   // Get the URL the user input into the text field
