@@ -762,13 +762,7 @@ if (data.feature === 'ecomTracker') {
     log('🧪 Bambuser Debugger 🧪\n', '✅ Tracking Library loaded successfully.');
     var bbu = copyFromWindow('_bambuser');
     if (typeof bbu === 'object') {
-      log(data);
-      const gtmInfo = getContainerVersion();
-      const options = {
-        meta: {
-        source: 'gtm-template',
-        customPayload: gtmInfo,
-      }};
+      log('🧪 Bambuser Debugger 🧪\n', 'ℹ️ Attempting to track "' + data.ecomEventName + '" event with the following data:\n', data);
       var eventData = {
         products: data.products
       };
@@ -777,14 +771,36 @@ if (data.feature === 'ecomTracker') {
       }
       log('Will track data');
       log(eventData);
-
-      bbu.track(data.ecomEventName, eventData, options).then(() => {
-        log('🧪 Bambuser Debugger 🧪\n', '✅ Tracking successfully sent with the following data:', eventData);
-        data.gtmOnSuccess();
-      }).catch(data.gtmOnFailure);
-      
-    }
-    else {
+      var logTrackingResult = function (result) {
+        if (getType(result) !== 'object' || typeof result.success !== 'boolean') {
+          log('🧪 Bambuser Debugger 🧪\n', '⚠️ Tracking completed with unknown result!');
+          return;
+        }
+        if (result.success) {
+          log('🧪 Bambuser Debugger 🧪\n', '✅ Tracking successfully completed!');
+        } else {
+          log('🧪 Bambuser Debugger 🧪\n', '❌ Tracking failed! \n', result.message);
+        }
+      };
+      const gtmInfo = getContainerVersion();
+      const options = {
+        meta: {
+          source: 'gtm-template',
+          customPayload: gtmInfo,
+        },
+        callbacks: {
+          onSuccess: function (result) { 
+            logTrackingResult(result); 
+            data.gtmOnSuccess(); 
+          },
+          onFailure: function (result) { 
+            logTrackingResult(result); 
+            data.gtmOnFailure(); 
+          },
+        }
+      };
+      bbu.track(data.ecomEventName, eventData, options);
+    } else {
       log('🧪 Bambuser Debugger 🧪\n', '❌ Problem with loading the library: ', bbu);
       data.gtmOnFailure();
     }
